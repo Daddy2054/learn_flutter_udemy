@@ -17,29 +17,16 @@ class MyApp extends StatelessWidget {
           title: Text('Building layouts'),
           centerTitle: true,
         ),
-        body: Row(
+        body: Stack(
+          alignment: Alignment.center,
           children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: EdgeInsets.all(30.0),
-                color: Colors.red,
-                child: Text('1'),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: EdgeInsets.all(30.0),
-                color: Colors.green,
-                child: Text('2'),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(30.0),
-                color: Colors.blue,
-                child: Text('3'),
+            Icon(Icons.airplay, color: Colors.red, size: 200),
+            Positioned(
+              top: 60,
+              left: 45,
+              child: Text(
+                'TV',
+                style: TextStyle(fontSize: 30),
               ),
             ),
           ],
