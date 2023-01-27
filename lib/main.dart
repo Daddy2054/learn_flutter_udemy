@@ -10,28 +10,425 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        primaryColor: Colors.white,
+
+//                colorScheme: ColorScheme.: Colors.red,
+//        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+      ),
       title: 'ListView',
       home: Scaffold(
+        backgroundColor: Colors.red,
         appBar: AppBar(
-          title: const Text('Building List View'),
+          elevation: 0,
+          title: const Text('Weather Forecast'),
           centerTitle: true,
         ),
-        body: const BodyListView(),
+        body: const HomePage(),
       ),
     );
   }
 }
 
-class BodyListView extends StatelessWidget {
-  const BodyListView({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _myListView();
+    return Column(
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            label: Text('Enter City Name'),
+            labelStyle: TextStyle(color: Colors.white),
+            prefixIcon: Icon(
+              Icons.search,
+//              color: Colors.white,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        _cityDetail(),
+        SizedBox(
+          height: 45,
+        ),
+        _tempDetail(),
+        SizedBox(
+          height: 45,
+        ),
+        _extraDetail(),
+        SizedBox(
+          height: 55,
+        ),
+        const Text(
+          '7-DAY WEATHER FORECAST',
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+          ),
+        ),
+        _bottomDetail(),
+      ],
+    );
   }
 }
 
-Widget _myListView() {
+Container _bottomDetail() {
+  return Container(
+    height: 140.0,
+    margin: const EdgeInsets.all(5.0),
+    padding: const EdgeInsets.all(15.0),
+    child: ListView(
+      // shrinkWrap: true,
+      itemExtent: 165,
+      scrollDirection: Axis.horizontal,
+      // padding: const EdgeInsets.all(7.0),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Monday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Tuesday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '5 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Wednesday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Thursday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Friday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Saturday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(color: Colors.red[200]),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            children: [
+              Text(
+                'Sunday',
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '6 oF',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Icon(Icons.sunny, color: Colors.white, size: 40.0),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Row _extraDetail() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      Column(
+        children: [
+          Icon(Icons.ac_unit_outlined, color: Colors.white, size: 30.0),
+          const Text(
+            '5',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+          const Text(
+            'km/hr',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+      Column(
+        children: [
+          Icon(Icons.ac_unit_outlined, color: Colors.white, size: 30.0),
+          const Text(
+            '3',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+          const Text(
+            '%',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+      Column(
+        children: [
+          Icon(Icons.ac_unit_outlined, color: Colors.white, size: 30.0),
+          const Text(
+            '20',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+          const Text(
+            '%',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+Row _tempDetail() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(Icons.sunny, color: Colors.white, size: 75.0),
+      Column(
+        children: [
+          const Text(
+            '14 oF',
+            style: TextStyle(
+              fontSize: 55,
+              color: Colors.white,
+            ),
+          ),
+          const Text(
+            'LIGHT SNOW',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+Column _cityDetail() {
+  return Column(
+    children: [
+      Text(
+        'Murmansk Oblast, RU',
+        style: TextStyle(fontSize: 35, color: Colors.white),
+      ),
+      SizedBox(
+        height: 15,
+      ),
+      Text(
+        'Friday, Mar 20, 2020',
+        style: TextStyle(fontSize: 18, color: Colors.white),
+      ),
+    ],
+  );
+}
+/* 
+Widget _my
+ListView() {
   final List<ListItem> items = List<ListItem>.generate(
       10000,
       (i) => i % 6 == 0
@@ -85,3 +482,4 @@ class MessageItem implements ListItem {
 
   MessageItem(this.sender, this.body);
 }
+ */
