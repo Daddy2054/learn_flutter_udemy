@@ -8,9 +8,27 @@ class RegisterFormPage extends StatefulWidget {
   _RegisterFormPageState createState() => _RegisterFormPageState();
 }
 
-bool _hidePass = true;
-
 class _RegisterFormPageState extends State<RegisterFormPage> {
+  bool _hidePass = true;
+
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _storyController = TextEditingController();
+  final _passController = TextEditingController();
+  final _confirmPassController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _storyController.dispose();
+    _passController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +39,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
         body: Form(
           child: ListView(padding: EdgeInsets.all(16), children: [
             TextField(
+              controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Full name *',
                 hintText: 'Enter your name',
@@ -49,6 +68,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             ),
             SizedBox(height: 16),
             TextFormField(
+              controller: _phoneController,
               decoration: InputDecoration(
                 labelText: 'Phone Number *',
                 hintText: 'Enter your phone',
@@ -83,6 +103,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             ),
             SizedBox(height: 16),
             TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email *',
                 hintText: 'Enter your email',
@@ -91,6 +112,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               keyboardType: TextInputType.emailAddress,
             ),
             TextFormField(
+              controller: _storyController,
               decoration: InputDecoration(
                 labelText: 'Life Story',
                 hintText: 'Enter your story',
@@ -100,6 +122,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               maxLines: 3,
             ),
             TextFormField(
+              controller: _passController,
               decoration: InputDecoration(
                 labelText: 'Password *',
                 hintText: 'Enter your password',
@@ -118,6 +141,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               maxLength: 8,
             ),
             TextFormField(
+              controller: _confirmPassController,
               obscureText: _hidePass,
               maxLength: 8,
               decoration: InputDecoration(
@@ -137,7 +161,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _submitForm,
               child: Text('Submit Form', style: TextStyle(color: Colors.white)),
               style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
@@ -145,5 +169,12 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
             ),
           ]),
         ));
+  }
+
+  void _submitForm() {
+    print('Name: ${_nameController.text}');
+    print('Phone: ${_phoneController.text}');
+    print('Email: ${_emailController.text}');
+    print('Story: ${_storyController.text}');
   }
 }
