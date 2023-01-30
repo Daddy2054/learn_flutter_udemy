@@ -47,10 +47,12 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Register Form'),
           centerTitle: true,
@@ -248,7 +250,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       print('Story: ${_storyController.text}');
       print('Country: $_selectedCountry');
     } else {
-      print('Form is invalid');
+      _showMessage(message: 'Form is invalid');
     }
   }
 
@@ -266,6 +268,16 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   bool _validatePhoneNumber(String? input) {
     final _phoneExp = RegExp(r'^\(\d{3}\)\d{3}-\d{4}$');
     return _phoneExp.hasMatch(input!);
+  }
+
+  void _showMessage({required String message}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.red,
+      content: Text(message,
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 18)),
+      duration: Duration(seconds: 5),
+    ));
   }
 }
 
