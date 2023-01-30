@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:learn_flutter_udemy/pages/user_info_page.dart';
+
+import '../model/user.dart';
 
 class RegisterFormPage extends StatefulWidget {
   const RegisterFormPage({super.key});
@@ -25,6 +28,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   final _phoneFocus = FocusNode();
   final _passFocus = FocusNode();
 
+  User newUser = User();
   @override
   void dispose() {
     _nameController.dispose();
@@ -98,6 +102,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 ),
               ),
               validator: _validateName,
+              onSaved: (value) => newUser.name = value,
             ),
             SizedBox(height: 16),
             TextFormField(
@@ -146,6 +151,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               validator: (value) => _validatePhoneNumber(value)
                   ? null
                   : 'Phone number must be entered as (###)###-####',
+              onSaved: (value) => newUser.phone = value,
             ),
             SizedBox(height: 16),
             TextFormField(
@@ -156,7 +162,8 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 icon: Icon(Icons.email),
               ),
               keyboardType: TextInputType.emailAddress,
-              validator: _validateEmail,
+           //   validator: _validateEmail,
+              onSaved: (value) => newUser.email = value,
             ),
             SizedBox(height: 16),
             DropdownButtonFormField(
@@ -167,10 +174,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                   child: Text(country),
                 );
               }).toList(),
-              onChanged: (value) {
-                print(value);
+              onChanged: (country) {
+                print(country);
                 setState(() {
-                  _selectedCountry = value.toString();
+                  _selectedCountry = country.toString();
                 });
               },
               decoration: InputDecoration(
@@ -179,6 +186,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 hintText: 'Select your country',
                 icon: Icon(Icons.map),
               ),
+              onSaved: (value) => newUser.country = value,
               // validator: (value) =>
               //     value == null ? 'Please select your country' : null,
             ),
@@ -195,6 +203,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
               inputFormatters: [
                 LengthLimitingTextInputFormatter(100),
               ],
+              onSaved: (value) => newUser.story = value,
             ),
             TextFormField(
               focusNode: _passFocus,
@@ -287,61 +296,69 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       duration: Duration(seconds: 5),
     ));
   }
-}
 
-String? _validateEmail(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Email is required';
-  } else if (!value.contains('@')) {
-    return 'Please enter a valid email address';
-  } else {
-    return null;
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    } else if (!value.contains('@')) {
+      return 'Please enter a valid email address';
+    } else {
+      return null;
+    }
   }
-}
 
-String? _validatePassword(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Password is required';
-  } else if (value.length < 8) {
-    return 'Password must be at least 8 characters';
-  } else {
-    return null;
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    } else {
+      return null;
+    }
   }
-}
 
-void _showDialog(String name, context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          'Registration Successful',
-          style: TextStyle(
-            color: Colors.green,
-          ),
-        ),
-        content: Text(
-          '$name is now registered',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Verified',
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 18,
-              ),
+  void _showDialog(String name, context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Registration Successful',
+            style: TextStyle(
+              color: Colors.green,
             ),
           ),
-        ],
-      );
-    },
-  );
+          content: Text(
+            '$name is now registered',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserInfoPage(
+                      userInfo: newUser,
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                'Verified',
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
