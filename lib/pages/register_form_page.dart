@@ -71,7 +71,12 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 labelText: 'Full name *',
                 hintText: 'Enter your name',
                 prefixIcon: Icon(Icons.person),
-                suffixIcon: Icon(Icons.delete_outline, color: Colors.red),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    _nameController.clear();
+                  },
+                  child: Icon(Icons.delete_outline, color: Colors.red),
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(
@@ -106,7 +111,10 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 hintText: 'Enter your phone',
                 helperText: 'Phone format: (XXX)XXX-XXXX',
                 prefixIcon: Icon(Icons.phone),
-                suffixIcon: Icon(Icons.delete_outline, color: Colors.red),
+                suffixIcon: GestureDetector(
+                  onTap: () => _phoneController.clear(),
+                  child: Icon(Icons.delete_outline, color: Colors.red),
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(
