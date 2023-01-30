@@ -44,18 +44,20 @@ class UserInfoPage extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            ListTile(
-              title: Text(
-                '${userInfo.email}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              leading: Icon(
-                Icons.mail,
-                color: Colors.black,
-              ),
-            )
+            userInfo.email != null && userInfo.email!.isNotEmpty
+                ? ListTile(
+                    title: Text(
+                      '${userInfo.email}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    leading: Icon(
+                      Icons.mail,
+                      color: Colors.black,
+                    ),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
