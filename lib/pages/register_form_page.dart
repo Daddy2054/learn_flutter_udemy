@@ -19,7 +19,11 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   final _confirmPassController = TextEditingController();
 
   List<String> _countries = ['USA', 'Canada', 'UK', 'India', 'Other'];
-String _selectedCountry = 'USA';
+  String _selectedCountry = 'USA';
+
+  final _nameFocus = FocusNode();
+  final _phoneFocus = FocusNode();
+  final _passFocus = FocusNode();
 
   @override
   void dispose() {
@@ -29,7 +33,17 @@ String _selectedCountry = 'USA';
     _storyController.dispose();
     _passController.dispose();
     _confirmPassController.dispose();
+    _nameFocus.dispose();
+    _phoneFocus.dispose();
+    _passFocus.dispose();
+
     super.dispose();
+  }
+
+  void _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -45,6 +59,11 @@ String _selectedCountry = 'USA';
           key: _formKey,
           child: ListView(padding: EdgeInsets.all(16), children: [
             TextFormField(
+              focusNode: _nameFocus,
+              autofocus: true,
+              onFieldSubmitted: (_) {
+                _fieldFocusChange(context, _nameFocus, _phoneFocus);
+              },
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Full name *',
@@ -75,6 +94,10 @@ String _selectedCountry = 'USA';
             ),
             SizedBox(height: 16),
             TextFormField(
+              focusNode: _phoneFocus,
+              onFieldSubmitted: (_) {
+                _fieldFocusChange(context, _phoneFocus, _passFocus);
+              },
               controller: _phoneController,
               decoration: InputDecoration(
                 labelText: 'Phone Number *',
@@ -164,6 +187,7 @@ String _selectedCountry = 'USA';
               ],
             ),
             TextFormField(
+              focusNode: _passFocus,
               controller: _passController,
               decoration: InputDecoration(
                 labelText: 'Password *',
