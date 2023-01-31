@@ -1,69 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:learn_flutter_udemy/offices.dart';
 
-void main(List<String> args) {
-  runApp(MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter JSON demo',
+    return const MaterialApp(
+      title: 'Vanilla Demo',
       home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<OfficesList> officesList;
-
-  @override
-  void initState() {
-    super.initState();
-    officesList = getOfficesList();
-  }
+  int _rating = 0;
 
   @override
   Widget build(BuildContext context) {
+    double size = 50;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manual JSON Serialization'),
-        centerTitle: true,
+        title: const Text('Vanilla Demo'),
       ),
-      body: FutureBuilder<OfficesList>(
-          future: officesList,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data?.offices.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text('${snapshot.data?.offices[index].name}'),
-                      subtitle:
-                          Text('${snapshot.data?.offices[index].address}'),
-                      leading: Image.network(
-                          '${snapshot.data?.offices[index].image}'),
-                      isThreeLine: true,
-                    ),
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            return const Center(child: CircularProgressIndicator());
-          }),
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconButton(
+              icon: (_rating >= 2
+                  ? Icon(
+                      Icons.star,
+                      size: size,
+                    )
+                  : Icon(
+                      Icons.star_border,
+                      size: size,
+                    )),
+              color: Colors.indigo[500],
+              iconSize: size,
+              onPressed: () {
+                setState(() {
+                  _rating = 1;
+                });
+              },
+            ),
+            IconButton(
+              icon: (_rating >= 2
+                  ? Icon(
+                      Icons.star,
+                      size: size,
+                    )
+                  : Icon(
+                      Icons.star_border,
+                      size: size,
+                    )),
+              color: Colors.indigo[500],
+              iconSize: size,
+              onPressed: () {
+                setState(() {
+                  _rating = 2;
+                });
+              },
+            ),
+            IconButton(
+              icon: (_rating >= 3
+                  ? Icon(
+                      Icons.star,
+                      size: size,
+                    )
+                  : Icon(
+                      Icons.star_border,
+                      size: size,
+                    )),
+              color: Colors.indigo[500],
+              iconSize: size,
+              onPressed: () {
+                setState(() {
+                  _rating = 3;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
