@@ -1,58 +1,63 @@
-import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(ChangeNotifierProvider(
+    create: (context) => ColorProvider(), child: const AnimatedContainerApp()));
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class AnimatedContainerApp extends StatefulWidget {
+  const AnimatedContainerApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<AnimatedContainerApp> createState() => _AnimatedContainerAppState();
+}
+
+class _AnimatedContainerAppState extends State<AnimatedContainerApp> {
+  // Define the various properties with default values. Update these properties
+  // when the user taps a FloatingActionButton.
+  double _width = 50;
+  double _height = 50;
+  bool light = true;
   @override
   Widget build(BuildContext context) {
+    ColorProvider state = Provider.of<ColorProvider>(context);
     return MaterialApp(
-      title: 'Inherited Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider<CountProvider>.value(value: CountProvider()),
-          FutureProvider<List<User>>(
-            initialData: const [],
-            create: (_) async => UserProvider().loadUserData(),
+      home: Consumer<ColorProvider>(
+        builder: (context, colorprovider, child) => Scaffold(
+          appBar: AppBar(
+            title: Text('Homework Provider',
+                style: TextStyle(
+                  color: colorprovider.newColor2,
+                )),
+            backgroundColor: Colors.black,
+            centerTitle: true,
           ),
-          StreamProvider<int>(
-            create: (_) => EventProvider().intStream(),
-            initialData: 0,
-          ),
-        ],
-        child: DefaultTabController(
-          length: 3,
-          child: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text("Provider Demo"),
-                centerTitle: true,
-                bottom: const TabBar(
-                  tabs: <Widget>[
-                    Tab(icon: Icon(Icons.add)),
-                    Tab(icon: Icon(Icons.person)),
-                    Tab(icon: Icon(Icons.message)),
-                  ],
+          body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,        
+            children: [
+              Center(
+                child: AnimatedContainer(
+                  // Use the properties stored in the State class.
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: colorprovider.newColor,
+                             ),
+                  // Define how long the animation should take.
+                  duration: const Duration(seconds: 1),
+                  // Provide an optional curve to make the animation feel smoother.
+                  curve: Curves.fastOutSlowIn,
                 ),
               ),
-              body: const TabBarView(
-                children: <Widget>[
-                  MyCountPage(),
-                  MyUserPage(),
-                  MyEventPage(),
-                ],
+              Switch(
+                value: light,
+                onChanged: (bool value) {
+                  state.randomColor();
+                  light = value;
+                },
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -60,162 +65,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyCountPage extends StatelessWidget {
-  const MyCountPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    CountProvider _state = Provider.of<CountProvider>(context);
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('ChangeNotifierProvider Example',
-                style: TextStyle(fontSize: 20)),
-            const SizedBox(height: 50),
-            Text('${_state.counterValue}',
-                style: Theme.of(context).textTheme.headline4),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  color: Colors.red,
-                  onPressed: () => _state._decrementCount(),
-                ),
-                Consumer<CountProvider>(
-                  builder: (context, state, child) {
-                    return IconButton(
-                      icon: const Icon(Icons.add),
-                      color: Colors.green,
-                      onPressed: () => state._incrementCount(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+class ColorProvider extends ChangeNotifier {
+  Color newColor = Colors.red;
+  Color newColor2 = Colors.blue;
+  void randomColor() {
+    var random = Random();
+    newColor = Color?.fromRGBO(
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+      1,
     );
-  }
-}
-
-class MyUserPage extends StatelessWidget {
-  const MyUserPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text('FutureProvider Example, users loaded from a File',
-              style: TextStyle(fontSize: 17)),
-        ),
-        Consumer<List<User>>(
-          builder: (context, List<User> users, _) {
-            return Expanded(
-              child: users.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: users.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            height: 50,
-                            color: Colors.grey[(index * 200) % 400],
-                            child: Center(
-                                child: Text(
-                                    '${users[index].firstName} ${users[index].lastName} | ${users[index].website}')));
-                      },
-                    ),
-            );
-          },
-        ),
-      ],
+    random = Random();
+    newColor2 = Color?.fromRGBO(
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+      1,
     );
-  }
-}
 
-// Event page (counting)
-class MyEventPage extends StatelessWidget {
-  const MyEventPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var _value = Provider.of<int>(context);
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('StreamProvider Example', style: TextStyle(fontSize: 20)),
-        const SizedBox(height: 50),
-        Text('${_value.toString()}', style: Theme.of(context).textTheme.headline4)
-      ],
-    ));
-  }
-}
-
-// CountProvider (ChangeNotifier)
-class CountProvider extends ChangeNotifier {
-  int _count = 0;
-  int get counterValue => _count;
-
-  void _incrementCount() {
-    _count++;
     notifyListeners();
   }
-
-  void _decrementCount() {
-    _count--;
-    notifyListeners();
-  }
-}
-
-// UserProvider (Future)
-class UserProvider {
-  final String _dataPath = "assets/users.json";
-  List<User> users = [];
-
-  Future<String> loadAsset() async {
-    return await Future.delayed(const Duration(seconds: 2), () async {
-      return await rootBundle.loadString(_dataPath);
-    });
-  }
-
-  Future<List<User>> loadUserData() async {
-    var dataString = await loadAsset();
-    Map<String, dynamic> jsonUserData = jsonDecode(dataString);
-    users = UserList.fromJson(jsonUserData['users']).users;
-    return users;
-  }
-}
-
-// EventProvider (Stream)
-class EventProvider {
-  Stream<int> intStream() {
-    Duration interval = const Duration(seconds: 2);
-    return Stream<int>.periodic(interval, (int count) => count++);
-  }
-}
-
-// User Model
-class User {
-  final String firstName, lastName, website;
-  const User(this.firstName, this.lastName, this.website);
-
-  User.fromJson(Map<String, dynamic> json)
-      : firstName = json['first_name'],
-        lastName = json['last_name'],
-        website = json['website'];
-}
-
-// User List Model
-class UserList {
-  final List<User> users;
-  UserList(this.users);
-
-  UserList.fromJson(List<dynamic> usersJson)
-      : users = usersJson.map((user) => User.fromJson(user)).toList();
 }
