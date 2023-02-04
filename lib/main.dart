@@ -110,6 +110,7 @@ class _ReadWriteFileExampleState extends State<ReadWriteFileExample> {
       final file = await _getLocalFile;
        content = await file.readAsString();
 log(content);
+
     } catch (e) {
       content = 'Error loading local file: $e';
     }
