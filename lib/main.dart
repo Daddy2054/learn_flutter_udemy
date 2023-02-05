@@ -1,42 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mysample/db/database.dart';
+import 'package:mysample/model/student.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: SharedPrefereceExample(),
+      title: 'SQLite CRUD Demo',
+      home: StudentPage(),
     );
   }
 }
 
-class SharedPrefereceExample extends StatefulWidget {
+class StudentPage extends StatefulWidget {
   @override
-  _SharedPrefereceExampleState createState() => _SharedPrefereceExampleState();
+  _StudentPageState createState() => _StudentPageState();
 }
 
-class _SharedPrefereceExampleState extends State<SharedPrefereceExample> {
-  late SharedPreferences _prefs;
+class _StudentPageState extends State<StudentPage> {
+  final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
+  final _studentNameController = TextEditingController();
 
-  static const String kNumberPrefKey = 'number_pref';
-  static const String kBoolPrefKey = 'bool_pref';
-
-  int _numberPref = 0;
-  bool _boolPref = false;
+  late Future<List<Student>> _studentsList;
+  late String _studentName;
+  bool isUpdate = false;
+  int? studentIdForUpdate;
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      setState(() {
-        _prefs = prefs;
-        _loadNumberPref();
-        _loadBoolPref();
-      });
+    updateStudentList();
+  }
+
+  updateStudentList() {
+    setState(() {
+      _studentsList = DBProvider.db.getStudents();
     });
   }
 
@@ -44,72 +47,171 @@ class _SharedPrefereceExampleState extends State<SharedPrefereceExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shared Preference'),
+        title: Text('SQLite CRUD Demo'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
       ),
       body: Column(
         children: <Widget>[
-          Table(
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: <TableRow>[
-              TableRow(children: <Widget>[
-                Text('Number Preference'),
-                Text('$_numberPref'),
-                ElevatedButton(
-                  child: Text('Increment'),
-                  onPressed: () {
-                    _setNumberPref(_numberPref + 1);
-                  },
+          Form(
+            key: _formStateKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please Enter Student Name';
+                      }
+                      if (value.trim() == "")
+                        return "Only Space is Not Valid!!!";
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _studentName = value!;
+                    },
+                    controller: _studentNameController,
+                    decoration: InputDecoration(
+                      focusedBorder: new UnderlineInputBorder(
+                        borderSide: new BorderSide(
+                            color: Colors.greenAccent,
+                            width: 2,
+                            style: BorderStyle.solid),
+                      ),
+                      labelText: "Student Name",
+                      icon: Icon(
+                        Icons.people,
+                        color: Colors.black,
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ),
-              ]),
-              TableRow(children: <Widget>[
-                Text('Boolean Preference'),
-                Text('$_boolPref'),
-                ElevatedButton(
-                  child: Text('Toogle'),
-                  onPressed: () {
-                    _setBoolPref(!_boolPref);
-                  },
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                  textStyle: TextStyle(color: Colors.white),
                 ),
-              ]),
+                // color: Colors.green,
+                child: Text(isUpdate ? 'UPDATE' : 'ADD'),
+                onPressed: () {
+                  if (isUpdate) {
+                    if (_formStateKey.currentState!.validate()) {
+                      _formStateKey.currentState!.save();
+                      DBProvider.db
+                          .updateStudent(
+                              Student(studentIdForUpdate!, _studentName))
+                          .then((data) {
+                        setState(() {
+                          isUpdate = false;
+                        });
+                      });
+                    }
+                  } else {
+                    if (_formStateKey.currentState!.validate()) {
+                      _formStateKey.currentState!.save();
+                      // DBProvider.db.insertStudent(Student(null, _studentName));
+                      DBProvider.db.insertStudent(Student(null, _studentName));
+                    }
+                  }
+                  _studentNameController.text = '';
+                  updateStudentList();
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  textStyle: TextStyle(color: Colors.white),
+                ),
+                child: Text(
+                  (isUpdate ? 'CANCEL UPDATE' : 'CLEAR'),
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  _studentNameController.text = '';
+                  setState(() {
+                    isUpdate = false;
+                    studentIdForUpdate = null;
+                  });
+                },
+              ),
             ],
           ),
-          ElevatedButton(
-            child: Text('Reset Data'),
-            onPressed: () {
-              _resetDataPref();
-            },
+          const Divider(
+            height: 5.0,
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: _studentsList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return generateList(snapshot.data as List<Student>);
+                }
+                if (snapshot.data == null ||
+                    (snapshot.data as List<Student>).length == 0) {
+                  return Text('No Data Found');
+                }
+                return CircularProgressIndicator();
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _resetDataPref() async {
-    await _prefs.remove(kNumberPrefKey);
-    await _prefs.remove(kBoolPrefKey);
-    _loadNumberPref();
-    _loadBoolPref();
-  }
-
-  Future<void> _setNumberPref(int value) async {
-    await _prefs.setInt(kNumberPrefKey, value);
-    _loadNumberPref();
-  }
-
-  Future<void> _setBoolPref(bool value) async {
-    await _prefs.setBool(kBoolPrefKey, value);
-    _loadBoolPref();
-  }
-
-  void _loadNumberPref() {
-    setState(() {
-      _numberPref = _prefs.getInt(kNumberPrefKey) ?? 0;
-    });
-  }
-
-  void _loadBoolPref() {
-    setState(() {
-      _boolPref = _prefs.getBool(kBoolPrefKey) ?? false;
-    });
+  SingleChildScrollView generateList(List<Student> students) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: DataTable(
+          columns: [
+            DataColumn(
+              label: Text('NAME'),
+            ),
+            DataColumn(
+              label: Text('DELETE'),
+            ),
+          ],
+          rows: students
+              .map(
+                (student) => DataRow(cells: [
+                  DataCell(Text(student.name), onTap: () {
+                    setState(() {
+                      isUpdate = true;
+                      studentIdForUpdate = student.id;
+                    });
+                    _studentNameController.text = student.name;
+                  }),
+                  DataCell(
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        DBProvider.db.deleteStudent(student.id);
+                        updateStudentList();
+                      },
+                    ),
+                  ),
+                ]),
+              )
+              .toList(),
+        ),
+      ),
+    );
   }
 }
