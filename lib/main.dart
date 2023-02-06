@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mysample/db/database.dart';
 import 'package:mysample/model/student.dart';
 
-void main() => runApp(const MyApp());
+
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -55,7 +54,7 @@ class _StudentPageState extends State<StudentPage> {
         children: <Widget>[
           Form(
             key: _formStateKey,
-            autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.always, 
             child: Column(
               children: <Widget>[
                 Padding(
@@ -103,8 +102,9 @@ class _StudentPageState extends State<StudentPage> {
                   primary: Colors.green,
                   textStyle: TextStyle(color: Colors.white),
                 ),
-                // color: Colors.green,
-                child: Text(isUpdate ? 'UPDATE' : 'ADD'),
+                child: Text(
+                  (isUpdate ? 'UPDATE' : 'ADD'),
+                ),
                 onPressed: () {
                   if (isUpdate) {
                     if (_formStateKey.currentState!.validate()) {
@@ -139,13 +139,12 @@ class _StudentPageState extends State<StudentPage> {
                 ),
                 child: Text(
                   (isUpdate ? 'CANCEL UPDATE' : 'CLEAR'),
-                  style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   _studentNameController.text = '';
                   setState(() {
                     isUpdate = false;
-                    studentIdForUpdate = null;
+                    studentIdForUpdate = null; // null;
                   });
                 },
               ),
@@ -161,8 +160,7 @@ class _StudentPageState extends State<StudentPage> {
                 if (snapshot.hasData) {
                   return generateList(snapshot.data as List<Student>);
                 }
-                if (snapshot.data == null ||
-                    (snapshot.data as List<Student>).length == 0) {
+                if (snapshot.data == null || (snapshot.data as List<Student>).length == 0) {
                   return Text('No Data Found');
                 }
                 return CircularProgressIndicator();
