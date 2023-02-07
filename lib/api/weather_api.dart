@@ -14,7 +14,7 @@ class WeatherApi {
     };
     var uri = Uri.https(Constants.WEATHER_BASE_URL_DOMAIN,
         Constants.WEATHER_FORECAST_PATH, queryParameters);
-
+   print('request: ${uri.toString()}');
     log('request: ${uri.toString()}');
     var response = await http.get(uri);
     log('response: ${response.body}');

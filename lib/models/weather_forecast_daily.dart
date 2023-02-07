@@ -143,7 +143,7 @@ class WeatherList {
     deg = json['deg'];
     gust = json['gust'];
     clouds = json['clouds'];
-    pop = json['pop'];
+    //pop = json['pop'];
   }
 
   Map<String, dynamic> toJson() {
@@ -211,10 +211,10 @@ class FeelsLike {
   FeelsLike({this.day, this.night, this.eve, this.morn});
 
   FeelsLike.fromJson(Map<String, dynamic> json) {
-    day = json['day'];
-    night = json['night'];
-    eve = json['eve'];
-    morn = json['morn'];
+    day = json['day'].toDouble();
+    night = json['night'].toDouble();
+    eve = json['eve'].toDouble();
+    morn = json['morn'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
