@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weather/api/weather_api.dart';
 import 'package:weather/widgets/city_view.dart';
 import 'package:weather/widgets/temp_view.dart';
+import 'package:weather/widgets/detail_view.dart';
 import '../models/weather_forecast_daily.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
       print(weather.list?[0].weather?[0].main);
       print(weather.list?[0].weather?[0].description);
     });
- */    /*      if (widget.locationWeather != null) {
+ */ /*      if (widget.locationWeather != null) {
       forecastObject = Future.value(widget.locationWeather);
     } */
   }
@@ -54,16 +55,22 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
             child: FutureBuilder<WeatherForecast>(
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Column(children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                      CityView(snapshot: snapshot),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      TempView(snapshot: snapshot),
-                    ]);
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                        ),
+                        CityView(snapshot: snapshot),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        TempView(snapshot: snapshot),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        DetaiView(snapshot: snapshot),
+                      ],
+                    );
                   } else {
                     return Center(
                       child: SpinKitDoubleBounce(
