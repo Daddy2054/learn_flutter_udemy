@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wheater/models/weather_forecast_daily.dart';
-import 'package:wheater/utilities/forecast_util.dart';
+import 'package:weather/models/weather_forecast_daily.dart';
+import 'package:weather/utilities/forecast_util.dart';
 
 class CityView extends StatelessWidget {
   final AsyncSnapshot<WeatherForecast> snapshot;

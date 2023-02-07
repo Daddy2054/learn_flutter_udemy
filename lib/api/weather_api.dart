@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:wheater/utilities/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:wheater/models/weather_forecast_daily.dart';
+
+import 'package:weather/models/weather_forecast_daily.dart';
+import 'package:weather/utilities/constants.dart';
 
 class WeatherApi {
   Future<WeatherForecast> fetchWeatherForecastWithCity({String? city}) async {
