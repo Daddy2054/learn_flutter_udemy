@@ -19,15 +19,16 @@ class WeatherForecastScreen extends StatefulWidget {
 
 class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   late Future<WeatherForecast> forecastObject;
-  String _cityName = 'London';
-  //late String _cityName;
+  //String _cityName = 'London';
+  late String _cityName;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.locationWeather != null) {
-      forecastObject = WeatherApi().fetchWeatherForecast();
+//      forecastObject = WeatherApi().fetchWeatherForecast();
+      forecastObject = Future.value(widget.locationWeather);
     }
 
 /*     forecastObject.then((weather) {
@@ -46,14 +47,15 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
           title: const Text('openweathermap.org'),
           backgroundColor: Colors.black87,
           centerTitle: true,
-          leading: IconButton(
+          automaticallyImplyLeading: false,
+           leading: IconButton(
             onPressed: () {
               setState(() {
                 forecastObject = WeatherApi().fetchWeatherForecast();
               });
             },
             icon: const Icon(Icons.my_location),
-          ),
+          ), 
           actions: [
             IconButton(
               onPressed: () async {
@@ -108,9 +110,10 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                     );
                   } else {
                     return const Center(
-                      child: SpinKitDoubleBounce(
-                        color: Colors.black87,
-                        size: 100.0,
+                      child: Text(
+                        'City not found\nPlease, enter correct city',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 25),
                       ),
                     );
                   }

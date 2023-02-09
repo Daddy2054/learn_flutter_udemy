@@ -13,7 +13,7 @@ class WeatherApi {
       {String? city, bool? isCity}) async {
     Location location = Location();
     await location.getCurrentLocation();
-   // Position position = await location._determinePosition();
+    // Position position = await location._determinePosition();
     Map<String, String?> parameters;
 
     if (isCity == true) {
@@ -42,7 +42,7 @@ class WeatherApi {
     if (response.statusCode == 200) {
       return WeatherForecast.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load weather forecast');
+      return Future.error('Error response');
     }
   }
 }
