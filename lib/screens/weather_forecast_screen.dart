@@ -25,7 +25,11 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   @override
   void initState() {
     super.initState();
-    forecastObject = WeatherApi().fetchWeatherForecastWithCity(city: _cityName);
+
+    if (widget.locationWeather != null) {
+      forecastObject = WeatherApi().fetchWeatherForecast();
+    }
+
 /*     forecastObject.then((weather) {
       print(weather.list?[0].weather?[0].main);
       print(weather.list?[0].weather?[0].description);
@@ -43,8 +47,12 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
           backgroundColor: Colors.black87,
           centerTitle: true,
           leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.my_location),
+            onPressed: () {
+              setState(() {
+                forecastObject = WeatherApi().fetchWeatherForecast();
+              });
+            },
+            icon: const Icon(Icons.my_location),
           ),
           actions: [
             IconButton(
@@ -52,20 +60,22 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                 var tappedName = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CityScreen(),
+                    builder: (context) => const CityScreen(),
                   ),
                 );
                 if (tappedName != null) {
                   setState(
                     () {
                       _cityName = tappedName!;
-                      forecastObject = WeatherApi()
-                          .fetchWeatherForecastWithCity(city: _cityName);
+                      forecastObject = WeatherApi().fetchWeatherForecast(
+                        city: _cityName,
+                        isCity: true,
+                      );
                     },
                   );
                 }
               },
-              icon: Icon(Icons.location_city),
+              icon: const Icon(Icons.location_city),
             ),
           ],
         ),
@@ -76,19 +86,19 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                   if (snapshot.hasData) {
                     return Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         CityView(snapshot: snapshot),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         TempView(snapshot: snapshot),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         DetaiView(snapshot: snapshot),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         BottomListview(
@@ -97,7 +107,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                       ],
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: SpinKitDoubleBounce(
                         color: Colors.black87,
                         size: 100.0,

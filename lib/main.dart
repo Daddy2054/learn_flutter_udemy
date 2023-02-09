@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather/screens/weather_forecast_screen.dart';
+import 'package:weather/screens/location_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -11,8 +12,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WeatherForecastScreen(),
+    return const MaterialApp(
+      home: LocationScreen(),
     );
   }
 }
