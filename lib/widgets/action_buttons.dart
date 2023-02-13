@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class ActionButtons extends StatelessWidget {
   const ActionButtons({super.key});
@@ -12,19 +10,19 @@ class ActionButtons extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {},
-          child: const Text('Load'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
           ),
+          child: const Text('Load'),
         ),
         const SizedBox(width: 8),
 
         ElevatedButton(
           onPressed: () {},
-          child: const Text('Clear'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
           ),
+          child: const Text('Clear'),
         ),
       ],
     );

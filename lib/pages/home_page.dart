@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:weather/widgets/action_buttons.dart';
-import 'package:weather/widgets/user_list.dart';
+import '../widgets/action_buttons.dart';
+import '../widgets/user_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +15,7 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: const [
           ActionButtons(),
           Expanded(child: UserList()),
         ],
